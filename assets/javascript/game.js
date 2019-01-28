@@ -1,45 +1,77 @@
-//var $placeholders = document.getElementById("placeholders");
-//var $newGameButton = document.getElementById("new-game-button");
-//var $guessedLetters = document.getElementById;("guessedLetters");
-//var $guessesLeft = document.getElementById;("guessesLeft");
-//var $wins = document.getElementById("wins");
-//var $losses = document.getElementById("losses")
-
-var words = ["geoffrey", "lurch", "alfred", "gereard"];
-
+var wordsList = ["spiderman", "thanos", "ironman", "antman", "hulk", "capitanamerica", "blackpanther", "hawkeye", "blackwidow", "thor"];
 var chosenWord = "";
-var lettersChosen = [];
+var lettersInChosenWord = [];
 var numBlanks = 0;
-var rightAndWrongs = [];
+var blanksAndSuccesses = [];
 var wrongGuesses = [];
+var winCounter = 0;
+var lossCounter = 0;
+var numGuesses = 9;
 
-var wins = 0;
-var losses = 0;
-var guessesLeft = 10;
+function startGame() {
+	numGuesses = 9;
+	chosenWord = wordsList[Math.floor(Math.random() * wordsList.length)];
+	lettersInChosenWord = chosenWord.split("");
+	numBlanks = lettersInChosenWord.length;
+	console.log(chosenWord);
 
-function newGame () {
+	blanksAndSuccesses = [];
+	wrongGuesses = [];
+	for (var i = 0; i < numBlanks; i++) {
+		blanksAndSuccesses.push("_");
+	};
+	console.log(blanksAndSuccesses);
+	document.getElementById("guesses-left").innerHTML = numGuesses;
+	document.getElementById("word-blanks").innerHTML = blanksAndSuccesses.join(" ");
+	document.getElementById("wrong-guesses").innerHTML = wrongGuesses.join(" ");
+};
 
-    guessesLeft = 10;
+function checkLetters(letter) {
+	var letterInWord = false;
+	for (var i = 0; i < numBlanks; i++) {
+		if (chosenWord[i] === letter) {
+			letterInWord = true;
+		}
+	}
 
-    chosenWord = words[Math.floor(Math.random () * words.length)];
+	if (letterInWord) {
+		for (var i = 0; i < numBlanks; i++) {
+			if (chosenWord[i] === letter) {
+				blanksAndSuccesses[i] = letter;
+			}
+		}
+		console.log(blanksAndSuccesses);
+	}
+	else {
+		wrongGuesses.push(letter);
+		numGuesses--;
+	}
+};
 
-    lettersChosen = chosenWord.split("");
+function roundComplete() {
+	console.log("WinCount: " + winCounter + " | LossCount: " + lossCounter + " | NumGuesses: " + numGuesses);
+	document.getElementById("guesses-left").innerHTML = numGuesses;
+	document.getElementById("word-blanks").innerHTML = blanksAndSuccesses.join(" ");
+	document.getElementById("wrong-guesses").innerHTML = wrongGuesses.join(" ");
 
-    numBlanks = lettersChosen.length;
+	if (lettersInChosenWord.toString() === blanksAndSuccesses.toString()) {
+		winCounter++;
+		alert("You win!");
 
-    console.log(chosenWord);
+		document.getElementById("win-counter").innerHTML = winCounter;
+		startGame();
+	}
+	else if (numGuesses === 0) {
+		lossCounter++;
+		alert("You lose");
+		document.getElementById("loss-counter").innerHTML = lossCounter;
+		startGame();
+	}
+}; 
+
+startGame();
+document.onkeyup = function(event) {
+	var letterGuessed = String.fromCharCode(event.keyCode).toLowerCase();
+	checkLetters(letterGuessed);
+	roundComplete();
 }
-
-
-
-
-//var letterChoices = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-
-
-
-
-
-
-
-
-

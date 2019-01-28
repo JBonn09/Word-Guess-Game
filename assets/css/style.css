@@ -2,3 +2,11 @@ h3 {
     color: black;
 }
 
+body {
+    background-image: url(http://www.qygjxz.com/data/out/176/4120624-photo-background-images.jpg)
+    
+}
+
+#new-game-button {
+    font-family: fantasy;
+}
